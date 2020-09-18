@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         //
         for(int i=0; i < names.length; i++) {
             cont = i;
-            usuarios.append(names[cont] + points[cont] + "\n");
+            usuarios.append(names[cont] + "     " +points[cont] + "\n");
         }
 
 
