@@ -27,47 +27,37 @@ public class Registro extends AppCompatActivity {
         txID = findViewById(R.id.txID);
         btContinuar = findViewById(R.id.btContinuar);
 
-        //shared preferences que recibe los usuarios que ya estan registrados
-        SharedPreferences preferences2 = getSharedPreferences("usuariosRegistrados",MODE_PRIVATE);
-        idUserR = preferences2.getString("noNew","no_user");
-
         //clic boton continuar
         btContinuar.setOnClickListener(
                 (view) -> {
 
-                    nom = txNombre.getText().toString();
-                    iden = txID.getText().toString();
+                    SharedPreferences preferencesUser = getSharedPreferences("user",MODE_PRIVATE);
+                    String registroYa = preferencesUser.getString("registro", "");
+                    String idYa = preferencesUser.getString("identificacion","");
 
-                    if(nom.equals(" ")){
-                        Toast.makeText(this, "Complete todos los datos", Toast.LENGTH_LONG).show();
+                    nom = txNombre.getText().toString().trim();
+                    iden = txID.getText().toString().trim();
+
+
+                    if(iden.isEmpty()==true){
+                        Toast.makeText(this, "Llene todos los datos", Toast.LENGTH_LONG).show();
                     }else{
-                        SharedPreferences preferences3 = getSharedPreferences("user",MODE_PRIVATE);
-                        preferences3.edit().putString("nom",nom).apply();
+                        if(idYa.contains(iden)){
+                            Toast.makeText(this, "Usario ya registrado", Toast.LENGTH_LONG).show();
 
-                        SharedPreferences preferences4 = getSharedPreferences("user",MODE_PRIVATE);
-                        preferences4.edit().putString("id",iden).apply();
+                        }else{
+                            String registro = registroYa+":"+nom;
+                            String identificacion = idYa+":"+iden;
 
+                            preferencesUser.edit().putString("registro",registro).apply();
+                            preferencesUser.edit().putString("identificacion",identificacion).apply();
 
-                        Intent i = new Intent(this, Nexo.class);
-                        //i.putExtra("nombre", nom);
-                        //i.putExtra("identificacion", iden);
-                        //setResult(RESULT_OK, i);
-                        startActivity(i);
-                        finish();
+                            Intent i = new Intent(this, Nexo.class);
+                            startActivity(i);
+                            finish();
 
-                        Log.d("iddddd", ""+iden);
-                        Log.d("nommmm", ""+nom);
-
-
+                        }
                     }
-
-
-                    /*if(iden.equals(idUserR)){
-                        Toast.makeText(this, "Este usuario ya existe, coloque otro", Toast.LENGTH_LONG).show();
-                    }else{
-                        startActivity(i);
-                        finish();
-                    }*/
 
                 }
         );

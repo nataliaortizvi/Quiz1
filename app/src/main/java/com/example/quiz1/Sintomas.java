@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,6 +17,8 @@ public class Sintomas extends AppCompatActivity {
     private Button btContinuar, btFinalizar;
     private CheckBox opcion1n, opcion2n, opcion3n, opcion4n, opcion5n, opcion6n, opcion7n;
     private int puntajeS = 0;
+    private int puntosT = 0;
+    private String totalP, totalYa;
     private boolean conti = true;
 
     @Override
@@ -34,6 +37,7 @@ public class Sintomas extends AppCompatActivity {
         opcion6n = findViewById(R.id.opcion6n);
         opcion7n = findViewById(R.id.opcion7n);
 
+        puntosT = getIntent().getExtras().getInt("puntoN");
 
         new Thread(
                 () ->{
@@ -74,7 +78,7 @@ public class Sintomas extends AppCompatActivity {
                                 }
                         );
                         try {
-                            Thread.sleep(500);
+                            Thread.sleep(100);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -120,13 +124,24 @@ public class Sintomas extends AppCompatActivity {
                         puntajeS = 0;
                     }
 
+                    puntajeS += puntosT;;
+
+
                     if(opcion1n.isChecked() == true || opcion2n.isChecked() == true || opcion3n.isChecked() == true ||
                             opcion4n.isChecked() == true || opcion5n.isChecked() == true || opcion6n.isChecked() == true || opcion7n.isChecked() == true){
 
                         //shared preferences de los puntajes de los sintomas
-                        SharedPreferences preferences2 = getSharedPreferences("puntajeSintomas", MODE_PRIVATE);
-                        preferences2.edit().putInt("sintomas", puntajeS).apply();
+                        SharedPreferences preferencesPuntaje = getSharedPreferences("puntos", MODE_PRIVATE);
+                        totalYa = preferencesPuntaje.getString("todosLosPuntos","");
+
+                        totalP = ""+puntajeS;
+
+                        String yaTodo = totalYa+":"+totalP;
+                        preferencesPuntaje.edit().putString("todosLosPuntos", yaTodo).apply();
+
                         Intent i = new Intent(this, MainActivity.class);
+
+
                         startActivity(i);
                         finish();
 

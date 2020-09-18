@@ -33,6 +33,7 @@ public class Nexo extends AppCompatActivity {
         opcion5 = findViewById(R.id.opcion5n);
 
 
+
         new Thread(
                 () ->{
                     while(conti==true){
@@ -66,7 +67,7 @@ public class Nexo extends AppCompatActivity {
                                 }
                         );
                         try {
-                            Thread.sleep(500);
+                            Thread.sleep(100);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -96,13 +97,15 @@ public class Nexo extends AppCompatActivity {
                         puntajeN = 0;
                     }
 
+
+
                     if(opcion1.isChecked() == true || opcion2.isChecked() == true || opcion3.isChecked() == true ||
                             opcion4.isChecked() == true || opcion5.isChecked() == true ){
-                        //shared preferences de los puntajes del nexo epidemiologico
-                        SharedPreferences preferences2 = getSharedPreferences("puntajeNexo", MODE_PRIVATE);
-                        preferences2.edit().putInt("nexo", puntajeN).apply();
 
                         Intent i = new Intent(this, Sintomas.class);
+
+                        i.putExtra("puntoN", puntajeN);
+
                         startActivity(i);
                         finish();
 
